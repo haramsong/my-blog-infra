@@ -43,15 +43,15 @@ resource "aws_cloudfront_distribution" "cdn" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
 
     origin_shield {
-      enabled = true
+      enabled              = true
       origin_shield_region = var.region
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = false
-  comment             = "CloudFront Distribution for ${var.bucket_name}"
-  aliases             = ["blog.${var.domain_name}"]
+  enabled         = true
+  is_ipv6_enabled = false
+  comment         = "CloudFront Distribution for ${var.bucket_name}"
+  aliases         = ["blog.${var.domain_name}"]
 
   price_class = "PriceClass_200"
 
@@ -68,10 +68,10 @@ resource "aws_cloudfront_distribution" "cdn" {
     allowed_methods = ["GET", "HEAD"]
     cached_methods  = ["GET", "HEAD"]
 
-    cache_policy_id = aws_cloudfront_cache_policy.my_custom_cache_policy.id
+    cache_policy_id            = aws_cloudfront_cache_policy.my_custom_cache_policy.id
     origin_request_policy_id   = "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf" # managed cors_s3_id
     response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd" # managed cors_with_preflight_id
-  
+
     function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.my_cloudfront_function.arn
