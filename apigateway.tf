@@ -1,6 +1,18 @@
 resource "aws_apigatewayv2_api" "api" {
   name          = "${var.api_endpoint}-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = [
+      "https://blog.${var.domain_name}",
+      "http://localhost:3000"
+    ]
+
+    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_headers = ["Content-Type", "x-api-token"]
+    expose_headers = ["Content-Type"]
+    max_age = 3600
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -11,9 +23,21 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "route" {
+resource "aws_apigatewayv2_route" "get" {
   api_id    = aws_apigatewayv2_api.api.id
-  route_key = "ANY /${var.api_endpoint}"
+  route_key = "GET /${var.api_endpoint}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "post" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /${var.api_endpoint}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "options" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "OPTIONS /${var.api_endpoint}"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
