@@ -8,6 +8,16 @@ exports.handler = async (event) => {
     return response(400, { message: "Missing slug" });
   }
 
+  const SECRET = process.env.API_SECRET;
+  const reqToken = event.headers["x-api-token"];
+  if (reqToken !== SECRET) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ message: "Unauthorized" }),
+      headers: defaultHeaders(),
+    };
+  }
+
   const method = event.requestContext.http.method;
   if (method === "GET") {
     const result = await db.get({ TableName: TABLE, Key: { slug } }).promise();

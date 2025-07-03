@@ -15,6 +15,7 @@ resource "aws_lambda_function" "view_count" {
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.view_count.name
+      API_SECRET = var.api_secret
     }
   }
 

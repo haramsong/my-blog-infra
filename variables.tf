@@ -29,3 +29,7 @@ variable "lambda_role_name" {
 variable "api_endpoint" {
   sensitive = true
 }
+
+variable "api_secret" {
+  sensitive = true
+}
