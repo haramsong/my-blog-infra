@@ -8,10 +8,10 @@ resource "aws_apigatewayv2_api" "api" {
       "http://localhost:3000"
     ]
 
-    allow_methods = ["GET", "POST", "OPTIONS"]
-    allow_headers = ["Content-Type", "x-api-token"]
+    allow_methods  = ["GET", "POST", "OPTIONS"]
+    allow_headers  = ["Content-Type", "x-api-token"]
     expose_headers = ["Content-Type"]
-    max_age = 3600
+    max_age        = 3600
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_apigatewayv2_domain_name" "api_domain" {
   domain_name = "api.${var.domain_name}"
 
   domain_name_configuration {
-    certificate_arn = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/${var.acm_id}"
+    certificate_arn = data.aws_acm_certificate.my_certificate.arn
     endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }
