@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
 
     origin_shield {
-      enabled              = true
+      enabled              = false
       origin_shield_region = var.region
     }
   }
@@ -54,6 +54,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases         = ["blog.${var.domain_name}"]
 
   price_class = "PriceClass_200"
+  http_version = "http3"
 
   viewer_certificate {
     acm_certificate_arn      = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/${var.acm_id}"
@@ -64,6 +65,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   default_cache_behavior {
     target_origin_id       = "S3-${var.bucket_name}"
     viewer_protocol_policy = "redirect-to-https"
+    compress               = true
 
     allowed_methods = ["GET", "HEAD"]
     cached_methods  = ["GET", "HEAD"]
