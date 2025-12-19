@@ -18,6 +18,7 @@ resource "aws_lambda_function" "view_count" {
       API_SECRET = var.api_secret
     }
   }
-
-  timeout = 3
+  architectures = ["arm64"]
+  memory_size   = 256
+  timeout       = 3
 }

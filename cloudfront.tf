@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases         = ["blog.${var.domain_name}"]
 
   price_class = "PriceClass_200"
-  http_version = "http3"
+  http_version = "http2"
 
   viewer_certificate {
     acm_certificate_arn      = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/${var.acm_id}"
