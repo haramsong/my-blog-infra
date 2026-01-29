@@ -17,7 +17,7 @@ function handler(event) {
   // trailing slash가 있으면 index.html 추가
   if (!defined.test(uri)) {
     request.uri = uri + 'index.html';
-    console.log('Request for [' + olduri + '] rewritten to [' + request.uri + ']');
+    console.log('Request for [' + uri + '] rewritten to [' + request.uri + ']');
   }
 
   return request;
