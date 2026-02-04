@@ -12,13 +12,15 @@ resource "aws_cloudfront_cache_policy" "my_custom_cache_policy" {
   max_ttl     = 43200
   min_ttl     = 3600
   parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_gzip   = true
+    enable_accept_encoding_brotli = true
     cookies_config {
       cookie_behavior = "none"
     }
     headers_config {
       header_behavior = "whitelist"
       headers {
-        items = ["Authorization", "Origin"]
+        items = ["Origin"]
       }
     }
     query_strings_config {
@@ -49,12 +51,12 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   enabled         = true
-  is_ipv6_enabled = false
+  is_ipv6_enabled = true
   comment         = "CloudFront Distribution for ${var.bucket_name}"
   aliases         = ["blog.${var.domain_name}"]
 
-  price_class = "PriceClass_200"
-  http_version = "http2"
+  price_class  = "PriceClass_200"
+  http_version = "http2and3"
 
   viewer_certificate {
     acm_certificate_arn      = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/${var.acm_id}"
